@@ -1,79 +1,118 @@
 package ast
 
 import (
+	"bytes"
 	"fmt"
+	"io"
+	"strconv"
 	"strings"
 )
 
-// Print displays a human-readable representation of a node
-func Print(n *Node) {
-	printLevel(n, 0)
+// Fprint writes the tree under n back as S-expression text. Items are
+// separated by one space; whitespace and comments of the source are not
+// kept. The items of a File are written without brackets.
+func Fprint(w io.Writer, n Node) error {
+	p := printer{w: w}
+	p.node(n)
+	return p.err
 }
 
-func printLevel(n *Node, level int) {
-	if n == nil {
-		fmt.Printf("()\n")
-		return
-	}
-	indent := strings.Repeat("    ", level)
-	fmt.Printf("%s(:%s ", indent, n.Type())
-	switch n.Type() {
-	case NodeTypeExpression, NodeTypeList, NodeTypeMap:
-		tok := n.Token()
-		if tok == nil {
-			fmt.Printf("()\n")
-		} else {
-			fmt.Printf("%v\n", n.Token())
-		}
-		list := n.List()
-		for i := range list {
-			printLevel(list[i], level+1)
-		}
-		fmt.Printf("%s)\n", indent)
+// Encode returns the text that Fprint writes for n.
+func Encode(n Node) []byte {
+	var buf bytes.Buffer
+	_ = Fprint(&buf, n) // A bytes.Buffer does not fail.
+	return buf.Bytes()
+}
 
-	default:
-		fmt.Printf("%v)\n", n.Token())
+// printer writes nodes to w and keeps the first write error.
+type printer struct {
+	w   io.Writer
+	err error
+}
+
+func (p *printer) print(s string) {
+	if p.err == nil {
+		_, p.err = io.WriteString(p.w, s)
 	}
 }
 
-// Encode transform a node into text representation
-func Encode(n *Node) []byte {
-	return encodeNodeLevel(n, 0)
+func (p *printer) node(n Node) {
+	switch n := n.(type) {
+	case *Int:
+		p.print(strconv.FormatInt(n.Value, 10))
+	case *Float:
+		p.print(strconv.FormatFloat(n.Value, 'g', -1, 64))
+	case *String:
+		p.print(strconv.Quote(n.Value))
+	case *Symbol:
+		p.print(n.Name)
+	case *Atom:
+		p.print(n.Name)
+	case *Expr:
+		p.items("(", n.Items, ")")
+	case *List:
+		p.items("[", n.Items, "]")
+	case *Map:
+		p.items("{", n.Items, "}")
+	case *File:
+		p.items("", n.Items, "")
+	}
 }
 
-func encodeNodeLevel(n *Node, level int) []byte {
-	if n == nil {
-		return []byte("()")
+func (p *printer) items(open string, items []Node, close string) {
+	p.print(open)
+	for i, item := range items {
+		if i > 0 {
+			p.print(" ")
+		}
+		p.node(item)
 	}
-	switch n.Type() {
-	case NodeTypeMap:
-		nodes := []string{}
-		for i := range n.List() {
-			nodes = append(nodes, string(encodeNodeLevel(n.List()[i], level+1)))
-		}
-		return []byte(fmt.Sprintf("{%s}", strings.Join(nodes, " ")))
+	p.print(close)
+}
 
-	case NodeTypeList:
-		nodes := []string{}
-		for i := range n.List() {
-			nodes = append(nodes, string(encodeNodeLevel(n.List()[i], level+1)))
+// Dump writes one line per node of the tree under root, for debugging: the
+// kind, the value of a leaf and the span, indented by depth. For the input
+// `(a 1)` it writes:
+//
+//	File 1:0>1:5
+//	  Expr 1:0>1:5
+//	    Symbol a 1:1>1:2
+//	    Int 1 1:3>1:4
+func Dump(w io.Writer, root Node) error {
+	for path, n := range WalkPath(root) {
+		kind, value := describe(n)
+		if value != "" {
+			value = " " + value
 		}
-		if level == 0 {
-			return []byte(strings.Join(nodes, " "))
+		indent := strings.Repeat("  ", len(path))
+		if _, err := fmt.Fprintf(w, "%s%s%s %v\n", indent, kind, value, n.Span()); err != nil {
+			return err
 		}
-		return []byte(fmt.Sprintf("[%s]", strings.Join(nodes, " ")))
-
-	case NodeTypeExpression:
-		nodes := []string{}
-		for i := range n.List() {
-			nodes = append(nodes, string(encodeNodeLevel(n.List()[i], level+1)))
-		}
-		if level == 0 {
-			return []byte(strings.Join(nodes, " "))
-		}
-		return []byte(fmt.Sprintf("(%s)", strings.Join(nodes, " ")))
-
-	default:
-		return []byte(n.Encode())
 	}
+	return nil
+}
+
+// describe returns the kind of n and, for a leaf, its value as text.
+func describe(n Node) (kind, value string) {
+	switch n := n.(type) {
+	case *Int:
+		return "Int", strconv.FormatInt(n.Value, 10)
+	case *Float:
+		return "Float", strconv.FormatFloat(n.Value, 'g', -1, 64)
+	case *String:
+		return "String", strconv.Quote(n.Value)
+	case *Symbol:
+		return "Symbol", n.Name
+	case *Atom:
+		return "Atom", n.Name
+	case *Expr:
+		return "Expr", ""
+	case *List:
+		return "List", ""
+	case *Map:
+		return "Map", ""
+	case *File:
+		return "File", ""
+	}
+	return fmt.Sprintf("%T", n), ""
 }

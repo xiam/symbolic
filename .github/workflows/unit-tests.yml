@@ -8,19 +8,30 @@ jobs:
 
     strategy:
       matrix:
-        go-version: [1.13.x, 1.14.x, 1.15.x]
+        go-version: [1.23.x, 1.24.x, 1.25.x]
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
 
       - name: Run tests
-        run: go test -v ./...
+        run: |
+          go vet ./...
+          go test -v -race ./...
+
+      # ./... does not match directories under _example/, so the
+      # calculator example is named by its path.
+      - name: Calculator example
+        run: |
+          go build ./_example/calc/...
+          go vet ./_example/calc/...
+          go test -v -race ./_example/calc/...
+          go run ./_example/calc/cmd/calc | diff _example/reference/calc/calc.txt -

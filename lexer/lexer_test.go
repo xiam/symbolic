@@ -186,6 +186,9 @@ func TestTokenize(t *testing.T) {
 }
 
 func TestColumnAndLines(t *testing.T) {
+	// Positions follow bytescan: 1-based lines and 0-based rune columns. A
+	// newline token is on the line it ends, and TokenEOF is at the end of
+	// input.
 	testCases := []struct {
 		In  string
 		Pos [][2]int
@@ -193,46 +196,46 @@ func TestColumnAndLines(t *testing.T) {
 		{
 			"",
 			[][2]int{
-				{1, 1},
+				{1, 0},
 			},
 		},
 		{
 			"1",
 			[][2]int{
-				{1, 1}, {1, 2},
+				{1, 0}, {1, 1},
 			},
 		},
 		{
 			"\n\n\n\n",
 			[][2]int{
+				{1, 0},
 				{2, 0},
 				{3, 0},
 				{4, 0},
 				{5, 0},
-				{5, 1},
 			},
 		},
 		{
 			"\n\n\nABCDF efgh\n",
 			[][2]int{
+				{1, 0},
 				{2, 0},
 				{3, 0},
-				{4, 0},
-				{4, 1}, {4, 6}, {4, 7},
+				{4, 0}, {4, 5}, {4, 6},
+				{4, 10},
 				{5, 0},
-				{5, 1},
 			},
 		},
 		{
 			"1\n\n\n\t\t23456",
 			[][2]int{
-				{1, 1}, // 1
+				{1, 0}, // 1
+				{1, 1}, // \n
 				{2, 0}, // \n
 				{3, 0}, // \n
-				{4, 0}, // \n
-				{4, 1}, // \t\t
-				{4, 3}, // 23456
-				{4, 8}, // EOF
+				{4, 0}, // \t\t
+				{4, 2}, // 23456
+				{4, 7}, // EOF
 			},
 		},
 	}
@@ -240,7 +243,7 @@ func TestColumnAndLines(t *testing.T) {
 	getTokenPositions := func(tokens []Token) [][2]int {
 		ret := make([][2]int, 0, len(tokens))
 		for i := range tokens {
-			ret = append(ret, [2]int{tokens[i].Pos().Line, tokens[i].Pos().Column})
+			ret = append(ret, [2]int{tokens[i].Pos().Line(), tokens[i].Pos().Column()})
 		}
 		return ret
 	}
