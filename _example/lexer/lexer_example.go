@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/xiam/s-expr/lexer"
+	"github.com/xiam/symbolic/lexer"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	}
 
 	for i, tok := range tokens {
-		line, col := tok.Pos()
+		line, col := tok.Pos().Line(), tok.Pos().Column()
 		lexeme := tok.Text()
 		tt := tok.Type().String()
 

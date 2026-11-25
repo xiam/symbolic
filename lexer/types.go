@@ -60,6 +60,7 @@ var tokenNames = map[TokenType]string{
 	TokenColon:           "colon",
 	TokenDot:             "dot",
 	TokenSequence:        "sequence",
+	TokenBackslash:       "backslash",
 	TokenEOF:             "EOF",
 }
 
@@ -79,8 +80,4 @@ func isTokenType(tt TokenType) func(r rune) bool {
 		}
 		return false
 	}
-}
-
-func isAritmeticSign(p rune) bool {
-	return p == '+' || p == '-'
 }

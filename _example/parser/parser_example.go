@@ -2,9 +2,10 @@ package main
 
 import (
 	"log"
+	"os"
 
-	"github.com/xiam/s-expr/ast"
-	"github.com/xiam/s-expr/parser"
+	"github.com/xiam/symbolic/ast"
+	"github.com/xiam/symbolic/parser"
 )
 
 func main() {
@@ -15,5 +16,7 @@ func main() {
 		log.Fatal("parser.Parse:", err)
 	}
 
-	ast.Print(root)
+	if err := ast.Dump(os.Stdout, root); err != nil {
+		log.Fatal("ast.Dump:", err)
+	}
 }

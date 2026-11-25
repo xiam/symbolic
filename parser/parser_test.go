@@ -5,7 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/xiam/s-expr/ast"
+	"github.com/stretchr/testify/require"
+	"github.com/xiam/symbolic/ast"
 )
 
 func TestParserBuildTree(t *testing.T) {
@@ -152,7 +153,10 @@ func TestParserBuildTree(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, root)
 
-		ast.Print(root)
+		var dump strings.Builder
+		assert.NoError(t, ast.Dump(&dump, root))
+		t.Log("\n" + dump.String())
+
 		s := ast.Encode(root)
 
 		assert.Equal(t, testCases[i].Out, string(s))
@@ -294,4 +298,23 @@ func TestParserErrors(t *testing.T) {
 		assert.Error(t, err)
 		t.Log(err)
 	}
+}
+
+// TestOddMap pins decision 1 of #2: maps are flat, and an odd number of items
+// is legal.
+func TestOddMap(t *testing.T) {
+	root, err := Parse([]byte(`{+ 1 2 3 4}`))
+	require.NoError(t, err)
+	require.Len(t, root.Items, 1)
+
+	m, ok := root.Items[0].(*ast.Map)
+	require.True(t, ok)
+	assert.Len(t, m.Items, 5)
+	assert.True(t, m.Odd())
+
+	var keys []string
+	for k := range m.Pairs() {
+		keys = append(keys, string(ast.Encode(k)))
+	}
+	assert.Equal(t, []string{"+", "2"}, keys)
 }

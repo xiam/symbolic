@@ -1,0 +1,165 @@
+token[0] (type: newline, line: 2, col: 0)
+	-> "\n"
+
+token[1] (type: separator, line: 2, col: 1)
+	-> "\t\t"
+
+token[2] (type: open_expression, line: 2, col: 3)
+	-> "("
+
+token[3] (type: word, line: 2, col: 4)
+	-> "fn_a"
+
+token[4] (type: separator, line: 2, col: 8)
+	-> " "
+
+token[5] (type: hash, line: 2, col: 9)
+	-> "#"
+
+token[6] (type: separator, line: 2, col: 10)
+	-> " "
+
+token[7] (type: word, line: 2, col: 11)
+	-> "comment"
+
+token[8] (type: newline, line: 3, col: 0)
+	-> "\n"
+
+token[9] (type: separator, line: 3, col: 1)
+	-> "\t\t\t"
+
+token[10] (type: open_expression, line: 3, col: 4)
+	-> "("
+
+token[11] (type: word, line: 3, col: 5)
+	-> "fn_b"
+
+token[12] (type: separator, line: 3, col: 9)
+	-> " "
+
+token[13] (type: open_list, line: 3, col: 10)
+	-> "["
+
+token[14] (type: integer, line: 3, col: 11)
+	-> "89"
+
+token[15] (type: separator, line: 3, col: 13)
+	-> " "
+
+token[16] (type: colon, line: 3, col: 14)
+	-> ":"
+
+token[17] (type: word, line: 3, col: 15)
+	-> "A"
+
+token[18] (type: separator, line: 3, col: 16)
+	-> " "
+
+token[19] (type: colon, line: 3, col: 17)
+	-> ":"
+
+token[20] (type: word, line: 3, col: 18)
+	-> "B"
+
+token[21] (type: separator, line: 3, col: 19)
+	-> " "
+
+token[22] (type: open_list, line: 3, col: 20)
+	-> "["
+
+token[23] (type: integer, line: 3, col: 21)
+	-> "67"
+
+token[24] (type: separator, line: 3, col: 23)
+	-> " "
+
+token[25] (type: integer, line: 3, col: 24)
+	-> "3"
+
+token[26] (type: dot, line: 3, col: 25)
+	-> "."
+
+token[27] (type: integer, line: 3, col: 26)
+	-> "27"
+
+token[28] (type: close_list, line: 3, col: 28)
+	-> "]"
+
+token[29] (type: close_list, line: 3, col: 29)
+	-> "]"
+
+token[30] (type: close_expression, line: 3, col: 30)
+	-> ")"
+
+token[31] (type: newline, line: 4, col: 0)
+	-> "\n"
+
+token[32] (type: separator, line: 4, col: 1)
+	-> "\t\t\t"
+
+token[33] (type: open_expression, line: 4, col: 4)
+	-> "("
+
+token[34] (type: word, line: 4, col: 5)
+	-> "fn_c"
+
+token[35] (type: separator, line: 4, col: 9)
+	-> " "
+
+token[36] (type: integer, line: 4, col: 10)
+	-> "66"
+
+token[37] (type: separator, line: 4, col: 12)
+	-> " "
+
+token[38] (type: integer, line: 4, col: 13)
+	-> "3"
+
+token[39] (type: separator, line: 4, col: 14)
+	-> " "
+
+token[40] (type: integer, line: 4, col: 15)
+	-> "53"
+
+token[41] (type: separator, line: 4, col: 17)
+	-> " "
+
+token[42] (type: double_quote, line: 4, col: 18)
+	-> "\""
+
+token[43] (type: word, line: 4, col: 19)
+	-> "Hello"
+
+token[44] (type: separator, line: 4, col: 24)
+	-> " "
+
+token[45] (type: word, line: 4, col: 25)
+	-> "world"
+
+token[46] (type: sequence, line: 4, col: 30)
+	-> "!"
+
+token[47] (type: double_quote, line: 4, col: 31)
+	-> "\""
+
+token[48] (type: close_expression, line: 4, col: 32)
+	-> ")"
+
+token[49] (type: newline, line: 5, col: 0)
+	-> "\n"
+
+token[50] (type: separator, line: 5, col: 1)
+	-> "\t\t"
+
+token[51] (type: close_expression, line: 5, col: 3)
+	-> ")"
+
+token[52] (type: newline, line: 6, col: 0)
+	-> "\n"
+
+token[53] (type: separator, line: 6, col: 1)
+	-> "\t"
+
+token[54] (type: EOF, line: 6, col: 2)
+	-> ""
+

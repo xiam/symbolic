@@ -1,0 +1,25 @@
+<list>
+  <expression>
+    <symbol>fn_a</symbol>
+    <expression>
+      <symbol>fn_b</symbol>
+      <list>
+        <int>89</int>
+        <atom>:A</atom>
+        <atom>:B</atom>
+        <list>
+          <int>67</int>
+          <float>3.27</float>
+        </list>
+      </list>
+    </expression>
+    <expression>
+      <symbol>fn_c</symbol>
+      <int>66</int>
+      <int>3</int>
+      <int>53</int>
+      <string>Hello world!</string>
+      <symbol>😊</symbol>
+    </expression>
+  </expression>
+</list>

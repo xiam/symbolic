@@ -1,0 +1,19 @@
+File 1:0>1:66
+  Expr 1:0>1:66
+    Symbol fn_a 1:1>1:5
+    Expr 1:6>1:33
+      Symbol fn_b 1:7>1:11
+      List 1:12>1:32
+        Int 89 1:13>1:15
+        Atom :A 1:16>1:18
+        Atom :B 1:19>1:21
+        List 1:22>1:31
+          Int 67 1:23>1:25
+          Float 3.27 1:26>1:30
+    Expr 1:34>1:65
+      Symbol fn_c 1:35>1:39
+      Int 66 1:40>1:42
+      Int 3 1:43>1:44
+      Int 53 1:45>1:47
+      String "Hello world!" 1:48>1:62
+      Symbol 😊 1:63>1:64
