@@ -4,6 +4,17 @@ All notable changes to this project are recorded in this file. The project
 follows [Semantic Versioning](https://semver.org/). While the major version is
 0, a minor release can change the API.
 
+## v0.1.1 - 2026-11-25
+
+Upgrade bytescan to v0.7.0, which makes the lexer faster. The API and the
+output of the lexer and the parser do not change.
+
+- The dependency [bytescan](https://github.com/xiam/bytescan) moves from
+  v0.6.0 to v0.7.0. bytescan v0.7.0 scans faster and keeps every token.
+- In a parse benchmark of a 15 KB input on one machine, a parse took about
+  26 % less time and about 30 % less memory than with bytescan v0.6.0. Your
+  numbers can be different.
+
 ## v0.1.0 - 2026-11-25
 
 First tagged release. The module path is now `github.com/xiam/symbolic`, the
