@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/stretchr/testify v1.9.0
-	github.com/xiam/bytescan v0.6.0
+	github.com/xiam/bytescan v0.7.0
 )
 
 require (
